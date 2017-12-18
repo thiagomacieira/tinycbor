@@ -85,6 +85,9 @@ private slots:
     void mapsAndArrays_data() { arrays_data(); }
     void mapsAndArrays();
 
+    void readerApi_data() { arrays_data(); }
+    void readerApi();
+
     // chunked string API
     void chunkedString_data();
     void chunkedString();
@@ -1036,6 +1039,54 @@ void tst_Parser::mapsAndArrays()
     // mixed with indeterminate length strings
     compareOneSize(-1, "\xbf\1\x9f" + data + "\xff\x65Hello\xbf" + data + "\x7f\xff\xff\xff",
                    "{_ 1: [_ " + expected + "], \"Hello\": {_ " + expected + ": (_ )}}");
+}
+
+void tst_Parser::readerApi()
+{
+    QFETCH(QByteArray, data);
+    QFETCH(QString, expected);
+
+    struct Input {
+        QByteArray data;
+        int consumed;
+    } input = { data, 0 };
+
+    CborParserOperations ops;
+    ops.can_read_bytes = [](void *token, size_t len) {
+        auto input = static_cast<Input *>(token);
+        return input->data.size() - input->consumed >= int(len);
+    };
+    ops.read_bytes = [](void *token, void *dst, size_t offset, size_t len) {
+        auto input = static_cast<Input *>(token);
+        return memcpy(dst, input->data.constData() + input->consumed + offset, len);
+    };
+    ops.advance_bytes = [](void *token, size_t len) {
+        auto input = static_cast<Input *>(token);
+        input->consumed += int(len);
+    };
+    ops.transfer_string = [](void *token, const void **userptr, size_t offset, size_t len) {
+        // ###
+        auto input = static_cast<Input *>(token);
+        if (input->data.size() - input->consumed < int(len + offset))
+            return CborErrorUnexpectedEOF;
+        input->consumed += int(offset);
+        *userptr = input->data.constData() + input->consumed;
+        input->consumed += int(len);
+        return CborNoError;
+    };
+
+    CborParser parser;
+    CborValue first;
+    CborError err = cbor_parser_init_reader(&ops, &parser, &first, &input);
+    QCOMPARE(err, CborNoError);
+
+    QString decoded;
+    err = parseOne(&first, &decoded);
+    QCOMPARE(err, CborNoError);
+    QCOMPARE(decoded, expected);
+
+    // check we consumed everything
+    QCOMPARE(input.consumed, data.size());
 }
 
 void tst_Parser::chunkedString_data()
