@@ -34,6 +34,7 @@
 #include "cborjson.h"
 #include "cborinternal_p.h"
 #include "compilersupport_p.h"
+#include "cborinternal_p.h"
 
 #include <inttypes.h>
 #include <stdio.h>
@@ -498,7 +499,7 @@ static CborError value_to_json(FILE *out, CborValue *it, int flags, CborType typ
         CborValue recursed;
         err = cbor_value_enter_container(it, &recursed);
         if (err) {
-            it->ptr = recursed.ptr;
+            copy_current_position(it, &recursed);
             return err;       /* parse error */
         }
         if (fputc(type == CborArrayType ? '[' : '{', out) < 0)
@@ -508,7 +509,7 @@ static CborError value_to_json(FILE *out, CborValue *it, int flags, CborType typ
                   array_to_json(out, &recursed, flags, status) :
                   map_to_json(out, &recursed, flags, status);
         if (err) {
-            it->ptr = recursed.ptr;
+            copy_current_position(it, &recursed);
             return err;       /* parse error */
         }
 
