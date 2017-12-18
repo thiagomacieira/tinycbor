@@ -225,7 +225,7 @@ void compareOne_real(const QByteArray &data, const QString &expected, int flags,
     QCOMPARE(decoded, expected);
 
     // check that we consumed everything
-    QCOMPARE((void*)first.ptr, (void*)data.constEnd());
+    QCOMPARE((void*)cbor_value_get_next_byte(&first), (void*)data.constEnd());
 
     compareFailed = false;
 }
@@ -665,7 +665,7 @@ void compareMetaData(QByteArray data, const QString &expected, int otherFlags = 
                  "\"; decoded stream:\n" + decoded.toLatin1());
 
         // check that we consumed everything
-        QCOMPARE((void*)first.ptr, (void*)data.constEnd());
+        QCOMPARE((void*)cbor_value_get_next_byte(&first), (void*)data.constEnd());
     }
 
     QVERIFY(decoded.startsWith("{\"v\":"));
