@@ -274,7 +274,8 @@ enum CborParserIteratorFlags
     CborIteratorFlag_NegativeInteger        = 0x04,
     CborIteratorFlag_IteratingStringChunks  = 0x08,
     CborIteratorFlag_UnknownLength          = 0x10,
-    CborIteratorFlag_ContainerIsMap         = 0x20
+    CborIteratorFlag_ContainerIsMap         = 0x20,
+    CborIteratorFlag_NextIsMapKey           = 0x40
 };
 
 struct CborParser

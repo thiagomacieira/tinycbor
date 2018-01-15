@@ -166,11 +166,15 @@ static bool is_fixed_type(uint8_t type)
 
 static CborError preparse_value(CborValue *it)
 {
+    enum {
+        /* flags to keep */
+        FlagsToKeep = CborIteratorFlag_ContainerIsMap | CborIteratorFlag_NextIsMapKey
+    };
     uint8_t descriptor;
 
     /* are we at the end? */
     it->type = CborInvalidType;
-    it->flags = 0;
+    it->flags &= FlagsToKeep;
     if (!read_bytes(it, &descriptor, 0, 1))
         return CborErrorUnexpectedEOF;
 
@@ -259,6 +263,11 @@ static CborError preparse_next_value_nodecrement(CborValue *it)
     uint8_t byte;
     if (it->remaining == UINT32_MAX && read_bytes(it, &byte, 0, 1) && byte == (uint8_t)BreakByte) {
         /* end of map or array */
+        if ((it->flags & CborIteratorFlag_ContainerIsMap && it->flags & CborIteratorFlag_NextIsMapKey)
+                || it->type == CborTagType) {
+            /* but we weren't expecting it! */
+            return CborErrorUnexpectedBreak;
+        }
         it->type = CborInvalidType;
         it->remaining = 0;
         it->flags |= CborIteratorFlag_UnknownLength; /* leave_container must consume the Break */
@@ -270,13 +279,20 @@ static CborError preparse_next_value_nodecrement(CborValue *it)
 
 static CborError preparse_next_value(CborValue *it)
 {
+    /* tags don't count towards item totals or whether we've successfully
+     * read a map's key or value */
+    bool itemCounts = it->type != CborTagType;
+
     if (it->remaining != UINT32_MAX) {
-        /* don't decrement the item count if the current item is tag: they don't count */
-        if (it->type != CborTagType && --it->remaining == 0) {
+        if (itemCounts && --it->remaining == 0) {
             it->type = CborInvalidType;
             it->flags &= ~CborIteratorFlag_UnknownLength; /* no Break to consume */
             return CborNoError;
         }
+    }
+    if (itemCounts) {
+        /* toggle the flag indicating whether this was a map key */
+        it->flags ^= CborIteratorFlag_NextIsMapKey;
     }
     return preparse_next_value_nodecrement(it);
 }
@@ -332,6 +348,7 @@ CborError cbor_parser_init(const uint8_t *buffer, size_t size, uint32_t flags, C
     it->parser = parser;
     it->ptr = buffer;
     it->remaining = 1;      /* there's one type altogether, usually an array or map */
+    it->flags = 0;
     return preparse_value(it);
 }
 
@@ -537,6 +554,7 @@ CborError cbor_value_skip_tag(CborValue *it)
  */
 CborError cbor_value_enter_container(const CborValue *it, CborValue *recursed)
 {
+    cbor_static_assert(CborIteratorFlag_ContainerIsMap == (CborMapType & ~CborArrayType));
     cbor_assert(cbor_value_is_container(it));
     *recursed = *it;
 
@@ -567,6 +585,7 @@ CborError cbor_value_enter_container(const CborValue *it, CborValue *recursed)
             return CborNoError;
         }
     }
+    recursed->flags = (recursed->type & CborIteratorFlag_ContainerIsMap);
     return preparse_next_value_nodecrement(recursed);
 }
 

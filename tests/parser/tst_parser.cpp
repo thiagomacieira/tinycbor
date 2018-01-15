@@ -1680,6 +1680,9 @@ static void addValidationData()
     QTest::newRow("array-no-break2") << raw("\x81\x9f\0") << 0 << CborErrorUnexpectedEOF;
     QTest::newRow("map-no-break1") << raw("\x81\xbf") << 0 << CborErrorUnexpectedEOF;
     QTest::newRow("map-no-break2") << raw("\x81\xbf\0\0") << 0 << CborErrorUnexpectedEOF;
+    QTest::newRow("map-break-after-key") << raw("\x81\xbf\0\xff") << 0 << CborErrorUnexpectedBreak;
+    QTest::newRow("map-break-after-value-tag") << raw("\x81\xbf\0\xc0\xff") << 0 << CborErrorUnexpectedBreak;
+    QTest::newRow("map-break-after-value-tag") << raw("\x81\xbf\0\xd8\x20\xff") << 0 << CborErrorUnexpectedBreak;
 
     // check for pointer additions wrapping over the limit of the address space
     CborError tooLargeOn32bit = (sizeof(void *) == 4) ? CborErrorDataTooLarge : CborErrorUnexpectedEOF;
