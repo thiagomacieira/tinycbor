@@ -259,9 +259,9 @@ static CborError preparse_next_value_nodecrement(CborValue *it)
     uint8_t byte;
     if (it->remaining == UINT32_MAX && read_bytes(it, &byte, 0, 1) && byte == (uint8_t)BreakByte) {
         /* end of map or array */
-        advance_bytes(it, 1);
         it->type = CborInvalidType;
         it->remaining = 0;
+        it->flags |= CborIteratorFlag_UnknownLength; /* leave_container must consume the Break */
         return CborNoError;
     }
 
@@ -274,6 +274,7 @@ static CborError preparse_next_value(CborValue *it)
         /* don't decrement the item count if the current item is tag: they don't count */
         if (it->type != CborTagType && --it->remaining == 0) {
             it->type = CborInvalidType;
+            it->flags &= ~CborIteratorFlag_UnknownLength; /* no Break to consume */
             return CborNoError;
         }
     }
@@ -585,7 +586,10 @@ CborError cbor_value_leave_container(CborValue *it, const CborValue *recursed)
 {
     cbor_assert(cbor_value_is_container(it));
     cbor_assert(recursed->type == CborInvalidType);
+
     copy_current_position(it, recursed);
+    if (recursed->flags & CborIteratorFlag_UnknownLength)
+        advance_bytes(it, 1);
     return preparse_next_value(it);
 }
 
