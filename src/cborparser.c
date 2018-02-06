@@ -1147,7 +1147,7 @@ static CborError get_string_chunk(CborValue *it, const void **bufferptr, size_t 
  */
 
 CborError _cbor_value_get_string_chunk(const CborValue *value, const void **bufferptr,
-                                                        size_t *len, CborValue *next)
+                                       size_t *len, CborValue *next)
 {
     CborValue tmp;
     if (!next)
