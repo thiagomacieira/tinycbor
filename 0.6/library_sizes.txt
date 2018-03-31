@@ -22,13 +22,13 @@ linux-g++:
    2287	      0	      0	   2287	    8ef	cborvalidation.o (ex lib/libtinycbor.a)
 macx-clang:
 __TEXT	__DATA	__OBJC	others	dec	hex
-1891	0	0	556	2447	98f	lib/libtinycbor.a(cborerrorstrings.o)
+1880	0	0	556	2436	984	lib/libtinycbor.a(cborerrorstrings.o)
 1816	0	0	3321	5137	1411	lib/libtinycbor.a(cborencoder.o)
 74	0	0	603	677	2a5	lib/libtinycbor.a(cborencoder_close_container_checked.o)
-4185	0	0	7392	11577	2d39	lib/libtinycbor.a(cborparser.o)
-3135	0	0	4687	7822	1e8e	lib/libtinycbor.a(cborpretty.o)
+4127	0	0	7259	11386	2c7a	lib/libtinycbor.a(cborparser.o)
+3163	0	0	4877	8040	1f68	lib/libtinycbor.a(cborpretty.o)
 186	0	0	601	787	313	lib/libtinycbor.a(cborparser_dup_string.o)
 379	0	0	793	1172	494	lib/libtinycbor.a(cborpretty_stdio.o)
-3984	0	0	4723	8707	2203	lib/libtinycbor.a(cbortojson.o)
-2530	0	0	4506	7036	1b7c	lib/libtinycbor.a(cborvalidation.o)
+3992	0	0	4724	8716	220c	lib/libtinycbor.a(cbortojson.o)
+2546	0	0	4691	7237	1c45	lib/libtinycbor.a(cborvalidation.o)
 447	0	0	991	1438	59e	lib/libtinycbor.a(open_memstream.o)
