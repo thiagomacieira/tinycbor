@@ -11,15 +11,15 @@ linux-clang:
    2598	      0	      0	   2598	    a26	cborvalidation.o (ex lib/libtinycbor.a)
 linux-g++:
    text	   data	    bss	    dec	    hex	filename
-   1709	      0	      0	   1709	    6ad	cborerrorstrings.o (ex lib/libtinycbor.a)
+   1698	      0	      0	   1698	    6a2	cborerrorstrings.o (ex lib/libtinycbor.a)
    1213	      0	      0	   1213	    4bd	cborencoder.o (ex lib/libtinycbor.a)
      53	      0	      0	     53	     35	cborencoder_close_container_checked.o (ex lib/libtinycbor.a)
-   3762	      0	      0	   3762	    eb2	cborparser.o (ex lib/libtinycbor.a)
-   2915	      0	      0	   2915	    b63	cborpretty.o (ex lib/libtinycbor.a)
+   3697	      0	      0	   3697	    e71	cborparser.o (ex lib/libtinycbor.a)
+   2914	      0	      0	   2914	    b62	cborpretty.o (ex lib/libtinycbor.a)
     200	      0	      0	    200	     c8	cborparser_dup_string.o (ex lib/libtinycbor.a)
     300	      0	      0	    300	    12c	cborpretty_stdio.o (ex lib/libtinycbor.a)
-   3836	      0	      0	   3836	    efc	cbortojson.o (ex lib/libtinycbor.a)
-   2287	      0	      0	   2287	    8ef	cborvalidation.o (ex lib/libtinycbor.a)
+   3837	      0	      0	   3837	    efd	cbortojson.o (ex lib/libtinycbor.a)
+   2357	      0	      0	   2357	    935	cborvalidation.o (ex lib/libtinycbor.a)
 macx-clang:
 __TEXT	__DATA	__OBJC	others	dec	hex
 1880	0	0	556	2436	984	lib/libtinycbor.a(cborerrorstrings.o)
