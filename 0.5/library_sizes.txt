@@ -26,7 +26,7 @@ linux-gcc-freestanding:
    1101	      0	      0	   1101	    44d	cborencoder.o (ex lib/libtinycbor.a)
      53	      0	      0	     53	     35	cborencoder_close_container_checked.o (ex lib/libtinycbor.a)
    2940	      0	      0	   2940	    b7c	cborparser.o (ex lib/libtinycbor.a)
-   2831	      0	      0	   2831	    b0f	cborpretty.o (ex lib/libtinycbor.a)
+   2699	      0	      0	   2699	    a8b	cborpretty.o (ex lib/libtinycbor.a)
 linux-gcc-no-math:
    text	   data	    bss	    dec	    hex	filename
    1555	      0	      0	   1555	    613	cborerrorstrings.o (ex lib/libtinycbor.a)
