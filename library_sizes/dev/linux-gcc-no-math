@@ -1,6 +1,6 @@
    text	   data	    bss	    dec	    hex	filename
    1698	      0	      0	   1698	    6a2	cborerrorstrings.o (ex lib/libtinycbor.a)
-   1145	      0	      0	   1145	    479	cborencoder.o (ex lib/libtinycbor.a)
+   1148	      0	      0	   1148	    47c	cborencoder.o (ex lib/libtinycbor.a)
      53	      0	      0	     53	     35	cborencoder_close_container_checked.o (ex lib/libtinycbor.a)
-   3689	      0	      0	   3689	    e69	cborparser.o (ex lib/libtinycbor.a)
-   2573	      0	      0	   2573	    a0d	cborpretty.o (ex lib/libtinycbor.a)
+   3706	      0	      0	   3706	    e7a	cborparser.o (ex lib/libtinycbor.a)
+   2558	      0	      0	   2558	    9fe	cborpretty.o (ex lib/libtinycbor.a)
