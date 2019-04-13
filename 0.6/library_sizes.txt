@@ -4,7 +4,7 @@ linux-clang:
    1201	      0	      0	   1201	    4b1	cborencoder.o (ex lib/libtinycbor.a)
      53	      0	      0	     53	     35	cborencoder_close_container_checked.o (ex lib/libtinycbor.a)
      86	      0	      0	     86	     56	cborencoder_float.o (ex lib/libtinycbor.a)
-   3451	      0	      0	   3451	    d7b	cborparser.o (ex lib/libtinycbor.a)
+   3408	      0	      0	   3408	    d50	cborparser.o (ex lib/libtinycbor.a)
      68	      0	      0	     68	     44	cborparser_float.o (ex lib/libtinycbor.a)
    3012	      0	      0	   3012	    bc4	cborpretty.o (ex lib/libtinycbor.a)
     204	      0	      0	    204	     cc	cborparser_dup_string.o (ex lib/libtinycbor.a)
