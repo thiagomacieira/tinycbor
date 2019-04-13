@@ -3,7 +3,7 @@ __TEXT	__DATA	__OBJC	others	dec	hex
 1807	0	0	3310	5117	13fd	lib/libtinycbor.a(cborencoder.o)
 74	0	0	569	643	283	lib/libtinycbor.a(cborencoder_close_container_checked.o)
 114	0	0	658	772	304	lib/libtinycbor.a(cborencoder_float.o)
-4041	0	0	7501	11542	2d16	lib/libtinycbor.a(cborparser.o)
+4025	0	0	7507	11532	2d0c	lib/libtinycbor.a(cborparser.o)
 89	0	0	652	741	2e5	lib/libtinycbor.a(cborparser_float.o)
 3076	0	0	4505	7581	1d9d	lib/libtinycbor.a(cborpretty.o)
 203	0	0	580	783	30f	lib/libtinycbor.a(cborparser_dup_string.o)
