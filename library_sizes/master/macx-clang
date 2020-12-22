@@ -1,6 +1,6 @@
 __TEXT	__DATA	__OBJC	others	dec	hex
 1733	0	0	528	2261	8d5	lib/libtinycbor.a(cborerrorstrings.o)
-1739	0	0	3193	4932	1344	lib/libtinycbor.a(cborencoder.o)
+1739	0	0	3196	4935	1347	lib/libtinycbor.a(cborencoder.o)
 74	0	0	569	643	283	lib/libtinycbor.a(cborencoder_close_container_checked.o)
 3769	0	0	6270	10039	2737	lib/libtinycbor.a(cborparser.o)
 3077	0	0	3658	6735	1a4f	lib/libtinycbor.a(cborpretty.o)
