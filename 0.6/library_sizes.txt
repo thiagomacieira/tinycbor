@@ -13,17 +13,17 @@ linux-clang:
    2626	      0	      0	   2626	    a42	cborvalidation.o (ex lib/libtinycbor.a)
 linux-g++:
    text	   data	    bss	    dec	    hex	filename
-   1698	      0	      0	   1698	    6a2	cborerrorstrings.o (ex lib/libtinycbor.a)
-   1362	      0	      0	   1362	    552	cborencoder.o (ex lib/libtinycbor.a)
+   1555	      0	      0	   1555	    613	cborerrorstrings.o (ex lib/libtinycbor.a)
+   1315	      0	      0	   1315	    523	cborencoder.o (ex lib/libtinycbor.a)
      53	      0	      0	     53	     35	cborencoder_close_container_checked.o (ex lib/libtinycbor.a)
     129	      0	      0	    129	     81	cborencoder_float.o (ex lib/libtinycbor.a)
-   4268	      0	      0	   4268	   10ac	cborparser.o (ex lib/libtinycbor.a)
-     70	      0	      0	     70	     46	cborparser_float.o (ex lib/libtinycbor.a)
-   2995	      0	      0	   2995	    bb3	cborpretty.o (ex lib/libtinycbor.a)
+   3483	      0	      0	   3483	    d9b	cborparser.o (ex lib/libtinycbor.a)
+     99	      0	      0	     99	     63	cborparser_float.o (ex lib/libtinycbor.a)
+   2799	      0	      0	   2799	    aef	cborpretty.o (ex lib/libtinycbor.a)
     206	      0	      0	    206	     ce	cborparser_dup_string.o (ex lib/libtinycbor.a)
     334	      0	      0	    334	    14e	cborpretty_stdio.o (ex lib/libtinycbor.a)
-   3950	      0	      0	   3950	    f6e	cbortojson.o (ex lib/libtinycbor.a)
-   2401	      0	      0	   2401	    961	cborvalidation.o (ex lib/libtinycbor.a)
+   3971	      0	      0	   3971	    f83	cbortojson.o (ex lib/libtinycbor.a)
+   2357	      0	      0	   2357	    935	cborvalidation.o (ex lib/libtinycbor.a)
 linux-gcc-freestanding:
    text	   data	    bss	    dec	    hex	filename
    1555	      0	      0	   1555	    613	cborerrorstrings.o (ex lib/libtinycbor.a)
