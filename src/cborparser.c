@@ -333,6 +333,14 @@ uint64_t _cbor_value_decode_int64_internal(const CborValue *value)
     return read_uint32(value, 1);
 }
 
+static void cbor_parser_init_common(CborParser *parser, CborValue *it)
+{
+    memset(parser, 0, sizeof(*parser));
+    it->parser = parser;
+    it->remaining = 1;      /* there's one type altogether, usually an array or map */
+    it->flags = 0;
+}
+
 /**
  * Initializes the CBOR parser for parsing \a size bytes beginning at \a
  * buffer. Parsing will use flags set in \a flags. The iterator to the first
@@ -345,24 +353,39 @@ uint64_t _cbor_value_decode_int64_internal(const CborValue *value)
  */
 CborError cbor_parser_init(const uint8_t *buffer, size_t size, uint32_t flags, CborParser *parser, CborValue *it)
 {
-    memset(parser, 0, sizeof(*parser));
-    parser->source.end = buffer + size;
+    cbor_parser_init_common(parser, it);
+    parser->data.end = buffer + size;
     parser->flags = (enum CborParserGlobalFlags)flags;
-    it->parser = parser;
     it->source.ptr = buffer;
-    it->remaining = 1;      /* there's one type altogether, usually an array or map */
-    it->flags = 0;
     return preparse_value(it);
 }
 
-CborError cbor_parser_init_reader(const struct CborParserOperations *ops, CborParser *parser, CborValue *it, void *token)
+/**
+ * Initializes the CBOR parser for parsing a document that is read by an
+ * abstract reader interface defined by \a ops. The iterator to the first
+ * element is returned in \a it.
+ *
+ * The \a parser structure needs to remain valid throughout the decoding
+ * process. It is not thread-safe to share one CborParser among multiple
+ * threads iterating at the same time, but the object can be copied so multiple
+ * threads can iterate.
+ *
+ * The \a ops structure defines functions that implement the read process from
+ * the buffer given, see \ref CborParserOperations for further details.
+ *
+ * The \a ctx is stored in the \ref CborParser object as `data.ctx` and may be
+ * used however the reader implementation sees fit.  For cursor-specific
+ * context information, the \ref CborValue `source.token` union member is
+ * initialised to `NULL` and may be used however the reader implementation
+ * sees fit.
+ */
+CborError cbor_parser_init_reader(const struct CborParserOperations *ops, CborParser *parser, CborValue *it, void *ctx)
 {
-    memset(parser, 0, sizeof(*parser));
-    parser->source.ops = ops;
+    cbor_parser_init_common(parser, it);
+    parser->ops = ops;
     parser->flags = CborParserFlag_ExternalSource;
-    it->parser = parser;
-    it->source.token = token;
-    it->remaining = 1;
+    parser->data.ctx = ctx;
+    it->source.token = NULL;
     return preparse_value(it);
 }
 

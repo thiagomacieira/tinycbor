@@ -211,7 +211,20 @@ typedef enum CborEncoderAppendType
     CborEncoderAppendStringData = 1
 } CborEncoderAppendType;
 
-typedef CborError (*CborEncoderWriteFunction)(void *, const void *, size_t, CborEncoderAppendType);
+/**
+ * Writer interface call-back function.  When there is data to be written to
+ * the CBOR document, this routine will be called.  The \a token parameter is
+ * taken from the \a token argument provided to \ref cbor_encoder_init_writer
+ * and may be used in any way the writer function sees fit.
+ *
+ * The \a data parameter contains a pointer to the raw bytes to be copied to
+ * the output buffer, with \a len specifying how long the payload is, which
+ * can be as small as a single byte or an entire (byte or text) string.
+ *
+ * The \a append parameter informs the writer function whether it is writing
+ * a string or general CBOR data.
+ */
+typedef CborError (*CborEncoderWriteFunction)(void *token, const void *data, size_t len, CborEncoderAppendType append);
 
 enum CborEncoderFlags
 {
@@ -315,20 +328,82 @@ enum CborParserIteratorFlags
 };
 
 struct CborValue;
+
+/**
+ * Defines an interface for abstract document readers.  This structure is used
+ * in conjunction with \ref cbor_parser_init_reader to define how the various
+ * required operations are to be implemented.
+ */
 struct CborParserOperations
 {
-    bool (*can_read_bytes)(void *token, size_t len);
-    void *(*read_bytes)(void *token, void *dst, size_t offset, size_t len);
-    void (*advance_bytes)(void *token, size_t len);
-    CborError (*transfer_string)(void *token, const void **userptr, size_t offset, size_t len);
+    /**
+     * Determines whether \a len bytes may be read from the reader.  This is
+     * called before \ref read_bytes and \ref transfer_bytes to ensure it is safe
+     * to read the requested number of bytes from the reader.
+     *
+     * \param   value   The CBOR value being parsed.
+     *
+     * \param   len     The number of bytes sought.
+     *
+     * \retval  true    \a len bytes may be read from the reader.
+     * \retval  false   Insufficient data is available to be read at this time.
+     */
+    bool (*can_read_bytes)(const struct CborValue *value, size_t len);
+
+    /**
+     * Reads \a len bytes from the reader starting at \a offset bytes from
+     * the current read position and copies them to \a dst.  The read pointer
+     * is *NOT* modified by this operation.
+     *
+     * \param   value   The CBOR value being parsed.
+     *
+     * \param   dst     The buffer the read bytes will be copied to.
+     *
+     * \param   offset  The starting position for the read relative to the
+     *                  current read position.
+     *
+     * \param   len     The number of bytes sought.
+     */
+    void *(*read_bytes)(const struct CborValue *value, void *dst, size_t offset, size_t len);
+
+    /**
+     * Skips past \a len bytes from the reader without reading them.  The read
+     * pointer is advanced in the process.
+     *
+     * \param   value   The CBOR value being parsed.
+     *
+     * \param   len     The number of bytes skipped.
+     */
+    void (*advance_bytes)(struct CborValue *value, size_t len);
+
+    /**
+     * Overwrite the user-supplied pointer \a userptr with the address where the
+     * data indicated by \a offset is located, then advance the read pointer
+     * \a len bytes beyond that point.
+     *
+     * This routine is used for accessing strings embedded in CBOR documents
+     * (both text and binary strings).
+     *
+     * \param   value   The CBOR value being parsed.
+     *
+     * \param   userptr The pointer that will be updated to reference the location
+     *                  of the data in the buffer.
+     *
+     * \param   offset  The starting position for the read relative to the
+     *                  current read position.
+     *
+     * \param   len     The number of bytes sought.
+     */
+    CborError (*transfer_string)(struct CborValue *value, const void **userptr, size_t offset, size_t len);
 };
 
 struct CborParser
 {
     union {
         const uint8_t *end;
-        const struct CborParserOperations *ops;
-    } source;
+        void *ctx;
+    } data;
+    const struct CborParserOperations *ops;
     enum CborParserGlobalFlags flags;
 };
 typedef struct CborParser CborParser;
