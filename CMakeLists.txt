@@ -24,7 +24,7 @@
 
 cmake_minimum_required(VERSION 3.10)
 
-project(tinycbor LANGUAGES C VERSION 0.6.0)
+project(tinycbor LANGUAGES C VERSION 0.7.0)
 
 # Set path to additional cmake scripts
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
@@ -54,23 +54,24 @@ if(WITH_FREESTANDING)
     $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-ffreestanding>
   )
 else()
-  target_sources(tinycbor
+  target_sources(tinycbor PRIVATE
     src/cborparser_dup_string.c
     src/cborpretty_stdio.c
   )
   if(WITH_CBOR2JSON)
-    target_sources(tinycbor
+    target_sources(tinycbor PRIVATE
       src/cbortojson.c
     )
   endif()
 endif()
 if(WITH_FLOATING_POINT)
-  find_package(Math REQUIRED)
-  target_sources(tinycbor
+  target_sources(tinycbor PRIVATE
     src/cborencoder_float.c
     src/cborparser_float.c
   )
-  target_link_libraries(tinycbor ${MATH_LIBRARIES})
+  if(NOT WIN32)
+    target_link_libraries(tinycbor m)
+  endif()
 else()
   target_compile_definitions(tinycbor PUBLIC CBOR_NO_FLOATING_POINT)
 endif()
@@ -117,5 +118,7 @@ install(
 set (PROJECT_LIBRARIES tinycbor)
 include(PackageConfig)
 
-enable_testing()
-add_subdirectory(tests)
+if(BUILD_TESTING)
+  enable_testing()
+  add_subdirectory(tests)
+endif()
