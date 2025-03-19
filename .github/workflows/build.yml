@@ -48,6 +48,7 @@ jobs:
             -DCMAKE_C_FLAGS="-Oz -g -Werror"
         - name: clang
           cmakeflags: >-
+            -DBUILD_EXAMPLES=ON
             -DBUILD_SHARED_LIBS=ON
             -DCMAKE_BUILD_TYPE=Debug
             -DCMAKE_C_COMPILER=clang
@@ -56,6 +57,7 @@ jobs:
             -DCMAKE_CXX_FLAGS_DEBUG="-Werror"
         - name: linux-g++
           cmakeflags: >-
+            -DBUILD_EXAMPLES=ON
             -DBUILD_SHARED_LIBS=ON
             -DCMAKE_BUILD_TYPE=Debug
             -DCMAKE_C_COMPILER=gcc
@@ -76,6 +78,7 @@ jobs:
           build_cfg:
             name: clang
             cmakeflags: >-
+              -DBUILD_EXAMPLES=ON
               -DBUILD_SHARED_LIBS=ON
               -DCMAKE_BUILD_TYPE=Debug
               -DCMAKE_C_COMPILER=clang
