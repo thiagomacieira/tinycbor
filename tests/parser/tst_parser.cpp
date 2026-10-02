@@ -1686,6 +1686,14 @@ void tst_Parser::strictValidation_data()
     QTest::newRow("tag-1-unsigned") << raw("\xc1\x00") << int(CborValidateStrictMode) << CborNoError;
     QTest::newRow("tag-1-negative") << raw("\xc1\x20") << int(CborValidateStrictMode) << CborNoError;
     QTest::newRow("tag-1-bytearray") << raw("\xc1\x40") << int(CborValidateStrictMode) << CborErrorInappropriateTagForType;
+    QTest::newRow("tag-1-string") << raw("\xc1\x60") << int(CborValidateStrictMode) << CborErrorInappropriateTagForType;
+    QTest::newRow("tag-1-array") << raw("\xc1\x80") << int(CborValidateStrictMode) << CborErrorInappropriateTagForType;
+    QTest::newRow("tag-1-map") << raw("\xc1\xa0") << int(CborValidateStrictMode) << CborErrorInappropriateTagForType;
+    QTest::newRow("tag-1-tag-unsigned") << raw("\xc1\xc1\x00") << int(CborValidateStrictMode) << CborErrorInappropriateTagForType;
+    QTest::newRow("tag-1-boolean") << raw("\xc1\xf4") << int(CborValidateStrictMode) << CborErrorInappropriateTagForType;
+    QTest::newRow("tag-1-fp16") << raw("\xc1\xf9\0\0") << int(CborValidateStrictMode) << CborNoError;
+    QTest::newRow("tag-1-float") << raw("\xc1\xfa\0\0\0\0") << int(CborValidateStrictMode) << CborNoError;
+    QTest::newRow("tag-1-double") << raw("\xc1\xfb\0\0\0\0\0\0\0\0") << int(CborValidateStrictMode) << CborNoError;
     QTest::newRow("tag-2-bytearray") << raw("\xc2\x40") << int(CborValidateStrictMode) << CborNoError;
     QTest::newRow("tag-2-string") << raw("\xc2\x60") << int(CborValidateStrictMode) << CborErrorInappropriateTagForType;
     QTest::newRow("tag-3-bytearray") << raw("\xc3\x40") << int(CborValidateStrictMode) << CborNoError;

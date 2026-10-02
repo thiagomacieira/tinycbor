@@ -129,7 +129,7 @@
   </tr>
   <tr>
     <td>1</td>
-    <td>integer</td>
+    <td>numeric (integer or floating-point)</td>
     <td>Epoch-based date/time</td>
   </tr>
   <tr>
@@ -238,7 +238,8 @@
 struct KnownTagData { uint32_t tag; uint32_t types; };
 static const struct KnownTagData knownTagData[] = {
     { 0, (uint32_t)CborTextStringType },
-    { 1, (uint32_t)(CborIntegerType+1) },
+    { 1, (uint32_t)(CborIntegerType+1) | ((uint32_t)CborHalfFloatType << 8) |
+         ((uint32_t)CborFloatType << 16) | ((uint32_t)CborDoubleType << 24)},
     { 2, (uint32_t)CborByteStringType },
     { 3, (uint32_t)CborByteStringType },
     { 4, (uint32_t)CborArrayType },
